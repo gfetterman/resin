@@ -498,6 +498,8 @@ def iter_mt(signal, rate, NFFT, noverlap, freq_range, data_in_window, tapers,
         spectrum = multi_taper(signal_interval, rate, tapers, lambdas, NFFT)
         if freq_range is not None:
             freq_mask = (freqs >= freq_range[0]) & (freqs < freq_range[1])
+            # temporary kludge to fix off-by-one error
+            freq_mask = freq_mask[:spectrum.shape[0]]
             yield spectrum[freq_mask], window_start / rate
         else:
             yield spectrum, window_start / rate
